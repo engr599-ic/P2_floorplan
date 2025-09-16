@@ -39,7 +39,7 @@ route_special -connect core_pin \
    -nets {VPWR VGND} \
    -allow_layer_change 1
 
-add_well_taps -cell sky130_fd_sc_ms__tap_1 -cell_interval 50
+add_well_taps -cell sky130_fd_sc_ms__tapvpwrvgnd_1 -cell_interval 50
 
 write_db -common dbs/pnr_init.db
 
@@ -65,3 +65,7 @@ write_db -common dbs/signoff.db
 
 write_netlist -include_pg -omit_floating_ports -update_tie_connections post_pnr_lvs.vg
 write_netlist -remove_power_ground post_pnr_sim.vg
+
+check_drc -out_file drc.rpt
+check_connectivity -out_file connect.rpt -ignore_dangling_wires
+

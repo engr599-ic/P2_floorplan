@@ -22,8 +22,7 @@ foreach file $ALL_LEFS {
 	if {![string match "*.magic.lef" $file] && \
         ![string match "*diode*" $file] && \
         ![string match "*tapmet1*" $file] && \
-        ![string match "*tapvgnd*" $file] && \
-        ![string match "*tapvpwrvgnd*" $file]  \
+        ![string match "*tapvgnd*" $file] \
         } {
 		lappend FILTERED_LEFS $file
 	}
@@ -37,7 +36,7 @@ set_db lib_search_path $LIB_DIR
 set_db syn_generic_effort medium
 set_db syn_map_effort medium
 
-set_multi_cpu_usage -local_cpu 8
+set_multi_cpu_usage -local_cpu 4
 
 # Disallow tool from using scan flops for non scan chain uses
 set_db use_scan_seqs_for_non_dft false

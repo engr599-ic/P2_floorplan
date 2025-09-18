@@ -20,7 +20,7 @@ assign sram_write = mem_valid && !mem_wstrb;
 assign mem_ready = mem_valid;
 
 sram_8_1024_sky130A SRAM (
-   .clk0(clk),
+   .clk(clk),
    .csb0(rstn),
    .web0(sram_write),
    .addr0(mem_addr[9:0]),

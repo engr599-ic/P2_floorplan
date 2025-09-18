@@ -1,7 +1,7 @@
 set_multi_cpu_usage -remote_host 4 -local_cpu 4
 read_db dbs/syn_opt.db/
 
-#set_design_mode -process "130"
+set_design_mode -process 130
 
 create_net -physical -name VPWR -power
 create_net -physical -name VGND -ground

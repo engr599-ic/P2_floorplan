@@ -1,0 +1,3 @@
+[submodule "sram-pnr"]
+	path = sram-pnr
+	url = git@github.com:engr599-ic/sram-pnr.git

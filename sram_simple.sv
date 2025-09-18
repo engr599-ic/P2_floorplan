@@ -11,6 +11,7 @@ module sram_simple(
    
    output [31:0] mem_rdata,
    output mem_ready
+   
 );
 
 logic sram_write;
@@ -18,13 +19,13 @@ assign sram_write = mem_valid && !mem_wstrb;
 
 assign mem_ready = mem_valid;
 
-sram_32_1024_sky130A SRAM (
+sram_8_1024_sky130A SRAM (
    .clk0(clk),
    .csb0(rstn),
    .web0(sram_write),
    .addr0(mem_addr[9:0]),
-   .din0(mem_wdata),
-   .dout0(mem_rdata)
+   .din0(mem_wdata[7:0]),
+   .dout0(mem_rdata[7:0])
 ); 
 
 endmodule

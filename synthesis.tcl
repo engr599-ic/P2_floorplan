@@ -29,7 +29,7 @@ foreach file $ALL_LEFS {
 	}
 }
 set FILTERED_LEFS [split $FILTERED_LEFS]
-lappend FILTERED_LEFS ./SRAM_32x1024/sram_32_1024_sky130A.fixed.lef
+lappend FILTERED_LEFS ./sram-pnr/sram.lef
 
 set_db lib_search_path $LIB_DIR
 

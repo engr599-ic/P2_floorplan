@@ -1,18 +1,18 @@
 create_library_set -name ss_m40_lib\
    -timing\
-    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ss_n40C_1v60.lib ./SRAM_32x1024/sram_32_1024_sky130A_SS_1p8V_25C.lib]
+    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ss_n40C_1v60.lib ./sram-pnr/sram_ss_m40.lib]
 create_library_set -name tt_25_lib\
    -timing\
-    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__tt_025C_1v80.lib ./SRAM_32x1024/sram_32_1024_sky130A_TT_1p8V_25C.lib]
+    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__tt_025C_1v80.lib ./sram-pnr/sram_tt_25.lib]
 create_library_set -name ff_150_lib\
    -timing\
-    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ff_150C_1v95.lib ./SRAM_32x1024/sram_32_1024_sky130A_FF_1p8V_25C.lib]
+    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ff_150C_1v95.lib ./sram-pnr/sram_ff_150.lib]
 create_library_set -name ff_m40_lib\
    -timing\
-    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ff_n40C_1v95.lib ./SRAM_32x1024/sram_32_1024_sky130A_FF_1p8V_25C.lib]
+    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ff_n40C_1v95.lib ./sram-pnr/sram_ss_m40.lib]
 create_library_set -name ss_150_lib\
    -timing\
-    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ss_150C_1v60.lib ./SRAM_32x1024/sram_32_1024_sky130A_SS_1p8V_25C.lib] 
+    [list /l/skywater-pdk/libraries/sky130_fd_sc_ms/latest/timing/sky130_fd_sc_ms__ss_150C_1v60.lib ./sram-pnr/sram_ss_150.lib] 
 create_timing_condition -name ff_150_cond\
    -library_sets [list ff_150_lib]
 create_timing_condition -name ss_m40_cond\

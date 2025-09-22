@@ -180,7 +180,13 @@ ANd this will draw verticle strips on Met4:
 
 <img width="604" height="652" alt="image" src="https://github.com/user-attachments/assets/b1e68725-ee6e-4aee-a22d-ca5b6f2cd88a" />
 
-### Running Checks
+
+#### Dealing with Dangling Nets
+
+```tcl
+check_connectivity -nets {VPWR VGND} -type all
+edit_trim_routes -all
+```
 
 #### Check Connectivity
 
@@ -188,16 +194,21 @@ If you want to run check_connectivity manually, it can be found here:
 
 <img width="259" height="265" alt="image" src="https://github.com/user-attachments/assets/c673efc5-8c7a-4cc8-a0b1-4f69154e5fdf" />
 
-### Dealing with Dangling Nets
+#### Reset Floorplan
 
-```tcl
-check_connectivity -nets {VPWR VGND} -type all
-edit_trim_routes -all
-```
+If (or when) you run into floorplanning issues and want to "reset" your floorplan, try the "Clear Floorplan" option in the GUI: 
+<img width="335" height="446" alt="image" src="https://github.com/user-attachments/assets/f6f741d9-580b-4a9a-89ed-c2c51df8088e" />
 
+### Save the Floorplan
+
+Once your happy with your floorplan, we suggest you save your floorplan.  Try File->Save->Floorplan.  
+### Finish the flow. 
+
+Now you can continue on with standard placement,  clock tree synthesis, routing, and signoff as per Project 1. 
+Most of this can be uncommented from the existing `pnr.tcl` script.  We recommend adding a `load_floorplan` command that loads the floorplan saved in the previous step.  
 
 -------
-STOPPED HERE
+Jack:  Add stuff here.  
 -------
 
 # Getting Help
@@ -208,18 +219,4 @@ For documentation on available commands, both tools (in GUI mode) also have a He
 
 # Your Turn
 
-Now that you know the basic flow, it's time to start tweaking for improved PPA.  Your task is customize this flow twice, once to optimize performance and once to optimize for area.  
-
-## Optimize for Performance
-
-By default, your PICORV core is targetting a 100ns (10MHz) clock.  Your task is to see how high you can push the frequency without causing setup/hold violations on any of the process corners.  
-
-Start by modifying this line in the `functional.sdc` Constraint file: 
-`create_clock -name clk -period 100 -waveform {0 50} [get_ports {clk}]`
-
-You will likely need to optimize both the `synthesis.tcl` and `pnr.tcl` to achieve the highest performance. 
-
-## Optimize for Area
-
-Next Time...
 

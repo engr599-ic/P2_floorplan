@@ -9,57 +9,67 @@ Version: 2025.0
 
 # Goal
 
-This project will walk you through the basics of a digital IC design flow using a PICORV RISC-V CPU core.  It will introduce you to both logic synthesis and place and route.  It will also help you understand the goals of optimizing Power/Performance/Area (PPA) for a digital circuit.  
+This project will walk you through the basics of setting up a floorplan for a digital IC design flow that includes both hard macros and standard cell logic.  It will also give you some exposure on the process of modifing an existing digital logic design to add more features. 
 
 # Setup
 
-## Login to Burrow - RedHat
-
 ```bash
 ssh burrow-rhel.luddy.indiana.edu -YCA
-```
-
-## Get the starter code
-
-This only needs to be done once per project
-
-```bash
-git clone https://github.com/engr599-ic/P1_run_the_flow.git
-cd P1_run_the_flow
+git clone https://github.com/engr599-ic/P2_floorplanning.git
+cd P2_floorplanning
 make setup
-```
-
-# Running the flow
-
-## Load CAD tools
-
-This needs to be every time you log in.  It loads the Computer Aided Design (CAD) tools we'll be using.  They are also called "Electronic Design Automation (EDA)" tools.  
-
-```bash
 source load_tools.sh
 ```
 
-If you get a "command not found" error, it's likely you forgot to (re)run this command. 
+# Modify the RTL
 
-You can also add this to your `~/.bash_profile` if you want it to get run every time you log in.  
+The first task is to modify the existing RTL to fix the desired circuit.  The base design only includes a single 8-bit wide SRAM macro.  Unfortunately, the PICORV core wants a 32-bit wide a single 8-bit wide SRAM
 
+<img width="502" height="403" alt="image" src="https://github.com/user-attachments/assets/174d7f5c-93eb-434e-888b-964b68c646c1" />
+
+
+Open `vsrc/sram_simple.sv`: 
+```module sram_simple(
+   input clk,
+   input rstn,
+   input mem_valid,
+   input mem_instr,
+   input [31:0] mem_addr,
+   input [31:0] mem_wdata,
+   input [3:0] mem_wstrb,
+
+   output [31:0] mem_rdata,
+   output mem_ready
+
+);
+
+logic sram_write;
+assign sram_write = mem_valid && mem_wstrb[0];
+
+assign mem_ready = mem_valid;
+
+sram_8_1024_sky130A SRAM (
+   .clk(clk),
+   .csb0(rstn),
+   .web0(sram_write),
+   .addr0(mem_addr[9:0]),
+   .din0(mem_wdata[7:0]),
+   .dout0(mem_rdata[7:0])
+);
+
+endmodule
+```
+# Run the Flow
 ## Synthesis
-
-This will run Synthesis, a process where an abstract description of a digital circuit (often at the register transfer level or RTL) is automatically translated into a gate-level implementation, optimized for specific design constraints
 
 ```bash
 make synth
 ```
 
-This will launch a tool named `genus`, and ask it to run the `synthesis.tcl` script.  It maps our RTL to Skywater Technology's S130 Process. This typically takes a few minutes. 
-
-Once this is complete, it will generate a `postsynth.vg` file.  This is a Verilog Gate-Level netlist.  
-
 You can also restore the synthesis database with:
 ```bash
 genus -gui -db ./dbs/syn_opt.db
 ```
-
 
 ## Place and Route
 

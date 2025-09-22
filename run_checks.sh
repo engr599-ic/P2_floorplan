@@ -41,5 +41,24 @@ else
   OVERALL="FAIL"
 fi
 
+SETUP_WNS=$(awk '/Setup mode/,/Hold mode/ { if (/WNS \(ns\):/) { match($0, /([+-]?[0-9]+\.?[0-9]*)/, a); print a[1]; exit } }' timing_report/picorv32.summary)
+
+HOLD_WNS=$(awk '/Hold mode/,/^$/ { if (/WNS \(ns\):/) { match($0, /([+-]?[0-9]+\.?[0-9]*)/, a); print a[1]; exit } }' timing_report/picorv32.summary)
+
+if (( $(echo "$SETUP_WNS >= 0" | bc -l) )); then
+  echo "PASS:  Setup Checks"
+else
+  echo "FAIL:  Setup Checks" 
+  OVERALL="FAIL"
+fi
+
+if (( $(echo "$HOLD_WNS >= 0" | bc -l) )); then
+  echo "PASS:  Hold Checks"
+else
+  echo "FAIL:  Hold Checks" 
+  OVERALL="FAIL"
+fi
+
+
 echo "Overall: $OVERALL"
 

@@ -1,4 +1,4 @@
-# P1: Run the Flow!
+# P2: Floorplanning
 
 Version: 2025.0
 ---
@@ -29,7 +29,8 @@ The first task is to modify the existing source files to fix the circuit.  The b
 
 To add the extra SRAM modules, you will need to **modify `vsrc/sram_simple.sv`**.  The code is shown below with some additional annotationed clues.  
 
-```module sram_simple(
+```
+module sram_simple(
    input clk,
    input rstn,
    input mem_valid,
@@ -67,6 +68,8 @@ Now we need to integrate the memory macros into the layout, or floorplan, of the
 
 This should be largely unchanged since Project 1.  One exception is that now the timing libraries for the sram are included in the `mmmc.tcl` file. 
 
+If you have any Verilog synatx errors, the synthesis step will catch those. 
+
 ```bash
 make synth
 ```
@@ -87,42 +90,99 @@ Start innovus:
 innovus -stylus
 ```
 
-Once that has launched, it should drop you at a TCL (Tool Command Language) prompt.  Load the modified pnr.tcl file
+Once that has launched, it should drop you at a TCL (Tool Command Language) prompt.  Run the modified pnr.tcl file *in the Innovus TCL shell*
 ```tcl
 source pnr.tcl
 ```
 
-This will load the design into Innovus, but won't do anything beyond that.  
+This will load the design into Innovus, but won't do anything beyond that. It should stop you in a screen that looks like this: 
+<img width="1032" height="896" alt="image" src="https://github.com/user-attachments/assets/581193ad-2b33-416f-aff7-b41ab8ce3e3c" />
 
+Note that the hard SRAM macros are on the right side.  
 
+### Resize floorplan
+By default, Innovus seems to make a floorplan that is too small for the SRAM macros.  You can use TCL commands to increase it's size, or use the GUI window, shown below: 
 
+<img width="388" height="321" alt="image" src="https://github.com/user-attachments/assets/59e98ce6-4351-4fdb-bd57-4ea3d0576676" />
 
-This launches a tool named `innovus`, and asks it to run `pnr.tcl`.  This will do the P&R on our previously synthesized netlist.  Once complete, you can open the database and view your results.  
+We suggest a ~70% core utilization.  
 
-```bash
-innovus -stylus -db ./dbs/signoff.db
-```
+### Place the SRAM Macros
 
-By default all database files are saved to the `dbs/` dir
+Now we need to move the SRAM macros where we want them.  One way to do that is to right click on one of the SRAM macros and select "Attach to Cursor".  Then you can move the macro where you want it and click to fix it's location. 
 
-## Timing
+<img width="632" height="670" alt="image" src="https://github.com/user-attachments/assets/911147da-2ee1-4bec-9b59-5e73d2e62b88" />
 
-The file `functional.sdc` is a synopsis design constraint file that dictates how fast the clock will be in your design.
-The synthesis and place and route tools will attempt to meet this timing constraint.
-[SDC Command Reference](https://iccircle.com/static/upload/img20240131000211.pdf)
+Now move the macros to arrange them inside the floorplan.  One suggestion is to arrange them as follows (but you can do other placements): 
 
-Timing reports can be found in the `RPT_final` directory as well as the `timingReports` directory.
+<img width="497" height="238" alt="image" src="https://github.com/user-attachments/assets/db4ab49c-1406-45ca-9f79-823fce970bc0" />
 
-### MMMC File
+#### Cut Core Rows
 
-An MMMC file (multi-mode multi-corner) file creates all of the corner information used by the synthesis and pnr tools. 
-This file sets the following:
-  - Library Sets
-    - Lists of `.lib` files that contain timing information for standard cells.
-  - Constraint Modes
-    - Links SDC files to specific Corners
-  - Delay Corners
-  - Analysis Views
+We don't want standard cells right up against the SRAM macros, so we'll use the "Cut Rows" option for that.  
+
+Start by selecting all 4 SRAM macros (Shift + Click).  With all 4 SRAM macros selected, select "Cut Core Rows" dropdown box, as shown below.  
+
+<img width="449" height="474" alt="image" src="https://github.com/user-attachments/assets/c6a13050-b349-4838-945d-eeb4abcd6ff7" />
+
+Once there, configure as shown below.  This will make sure no standard cells are placed within 4 "units" on the left/right, and 2 on the top/bottom.  The top/bottom units are larger than the left/right, so we're excluding a larger number of left/right units.  
+
+<img width="400" height="441" alt="image" src="https://github.com/user-attachments/assets/1d76c952-a3a7-4d7e-9c95-ae2f1cc0fa37" />
+
+### Power Planning
+
+#### Macro Connection
+
+First, let's draw a ring around the macros: 
+
+<img width="665" height="375" alt="image" src="https://github.com/user-attachments/assets/6555bcf4-9f62-4c3a-bab8-18e0cd8dbbbb" />
+
+<img width="604" height="505" alt="image" src="https://github.com/user-attachments/assets/18570b31-6e79-4151-99d5-0f74595a4aa0" />
+
+- Nets:  VPWR VGND
+- Block ring(s) around each block
+- Top/Bottom:  Met5, 10um width
+- Left/Right:  Met4: 10um width
+
+That should have drawn the rings, but not connected them to the macros.  For that, we will use SRoute (Special Route): 
+
+<img width="200" height="202" alt="image" src="https://github.com/user-attachments/assets/0047d134-0dcb-412f-a363-33e79d3628ec" />
+
+This will connect the power rings around the macros: 
+
+<img width="522" height="631" alt="image" src="https://github.com/user-attachments/assets/7f42fcb0-e395-43a8-93da-9338905e197a" />
+
+If all goes well, it should look like this: 
+
+<img width="430" height="427" alt="image" src="https://github.com/user-attachments/assets/215638a7-433d-4682-9d2d-ecadc277d125" />
+
+#### Follow-Pins
+
+Next, let's use SRoute to put down power rails for the standard cells.  These are often called the "Follow Pins". 
+
+<img width="200" height="202" alt="image" src="https://github.com/user-attachments/assets/0047d134-0dcb-412f-a363-33e79d3628ec" />
+
+And configure it as follows: 
+
+<img width="518" height="628" alt="image" src="https://github.com/user-attachments/assets/25aeaebb-2337-4709-a2ea-ce09dd58999b" />
+
+#### Stripes
+
+Now let's add some power/ground strips to get the power distributed around the chip:
+
+<img width="601" height="654" alt="image" src="https://github.com/user-attachments/assets/725979d4-b7e3-4e5d-8dd4-cb9b803ff588" />
+
+This should draw horizontal strips on Met5:
+
+<img width="284" height="247" alt="image" src="https://github.com/user-attachments/assets/a0b8e966-446d-42e3-a9ff-f46fe4149489" />
+
+ANd this will draw verticle strips on Met4: 
+
+<img width="604" height="652" alt="image" src="https://github.com/user-attachments/assets/b1e68725-ee6e-4aee-a22d-ca5b6f2cd88a" />
+
+-------
+STOPPED HERE
+-------
 
 # Getting Help
 

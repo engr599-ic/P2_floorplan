@@ -15,7 +15,7 @@ module sram_simple(
 );
 
 logic sram_write;
-assign sram_write = mem_valid && !mem_wstrb;
+assign sram_write = mem_valid && mem_wstrb[0];
 
 assign mem_ready = mem_valid;
 

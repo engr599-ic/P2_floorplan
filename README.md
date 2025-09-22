@@ -180,6 +180,22 @@ ANd this will draw verticle strips on Met4:
 
 <img width="604" height="652" alt="image" src="https://github.com/user-attachments/assets/b1e68725-ee6e-4aee-a22d-ca5b6f2cd88a" />
 
+### Running Checks
+
+#### Check Connectivity
+
+If you want to run check_connectivity manually, it can be found here: 
+
+<img width="259" height="265" alt="image" src="https://github.com/user-attachments/assets/c673efc5-8c7a-4cc8-a0b1-4f69154e5fdf" />
+
+### Dealing with Dangling Nets
+
+```tcl
+check_connectivity -nets {VPWR VGND} -type all
+edit_trim_routes -all
+```
+
+
 -------
 STOPPED HERE
 -------

@@ -21,14 +21,14 @@ make setup
 source load_tools.sh
 ```
 
-# Modify the RTL
+# Modify the Design
 
-The first task is to modify the existing RTL to fix the desired circuit.  The base design only includes a single 8-bit wide SRAM macro.  Unfortunately, the PICORV core wants a 32-bit wide a single 8-bit wide SRAM
+The first task is to modify the existing source files to fix the circuit.  The base design only includes a single 8-bit wide memory (SRAM) macro. This would be fine for an 8-bit (1 byte) CPU.  Unfortunately, the PICORV core is a 32-bit (4 byte) system, which needs a 32-bit wide memory interface.  So you will need to modify the RTL to include 4 8-bit wide SRAM macros to create a 32-bit interface.  A cartoon of how to pin mapping should go is shown below.  
 
-<img width="502" height="403" alt="image" src="https://github.com/user-attachments/assets/174d7f5c-93eb-434e-888b-964b68c646c1" />
+<img width="494" height="388" alt="image" src="https://github.com/user-attachments/assets/8240aeb6-fa7b-4dae-a5d0-5b49c2a2f406" />
 
+To add the extra SRAM modules, you will need to **modify `vsrc/sram_simple.sv`**.  The code is shown below with some additional annotationed clues.  
 
-Open `vsrc/sram_simple.sv`: 
 ```module sram_simple(
    input clk,
    input rstn,
@@ -44,23 +44,28 @@ Open `vsrc/sram_simple.sv`:
 );
 
 logic sram_write;
-assign sram_write = mem_valid && mem_wstrb[0];
+assign sram_write = mem_valid && mem_wstrb[0];// <- will need modified for each block
 
 assign mem_ready = mem_valid;
 
-sram_8_1024_sky130A SRAM (
-   .clk(clk),
-   .csb0(rstn),
-   .web0(sram_write),
-   .addr0(mem_addr[9:0]),
-   .din0(mem_wdata[7:0]),
-   .dout0(mem_rdata[7:0])
+sram_8_1024_sky130A SRAM ( // <- will need to make 4 instances of this
+   .clk(clk), // <- will stay the same for each block
+   .csb0(rstn), // <- will stay the same for each block
+   .web0(sram_write),  // <- will need modified for each block
+   .addr0(mem_addr[9:0]), // <- will stay the same for each block
+   .din0(mem_wdata[7:0]), // <- will need modified for each block
+   .dout0(mem_rdata[7:0]) // <- will need modified for each block
 );
 
 endmodule
 ```
-# Run the Flow
+# Floorplanning
+
+Now we need to integrate the memory macros into the layout, or floorplan, of the overall system. This will start just like Project 1, but you will need to do more manual intervention on the place and route phase.   
+
 ## Synthesis
+
+This should be largely unchanged since Project 1.  One exception is that now the timing libraries for the sram are included in the `mmmc.tcl` file. 
 
 ```bash
 make synth
@@ -73,11 +78,24 @@ genus -gui -db ./dbs/syn_opt.db
 
 ## Place and Route
 
-Place and Route (P&R or PnR) is where electronic components and their interconnections are automatically arranged and routed on a chip or printed circuit board (PCB).  It is also called Automatic Place and Route (APR).  
+Ok, now you get to design your own floorplan.  
 
+### Load design
+
+Start innovus:
 ```bash
-make pnr
+innovus -stylus
 ```
+
+Once that has launched, it should drop you at a TCL (Tool Command Language) prompt.  Load the modified pnr.tcl file
+```tcl
+source pnr.tcl
+```
+
+This will load the design into Innovus, but won't do anything beyond that.  
+
+
+
 
 This launches a tool named `innovus`, and asks it to run `pnr.tcl`.  This will do the P&R on our previously synthesized netlist.  Once complete, you can open the database and view your results.  
 

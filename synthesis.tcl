@@ -1,9 +1,9 @@
 set TOP_MODULE SOC
 
 set HDL_FILES {
-   ./soc.sv
-	./picorv32/picorv32.v
-   ./sram_simple.sv
+   ./vsrc/soc.sv
+   ./vsrc/sram_simple.sv
+   ./picorv32/picorv32.v
 }
 
 set MMMC_FILE ./mmmc.tcl

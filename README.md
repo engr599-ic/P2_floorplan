@@ -219,4 +219,10 @@ For documentation on available commands, both tools (in GUI mode) also have a He
 
 # Your Turn
 
+Now it's your turn to run your own flow.  This time we're concerned with getting the DRC and connectivity checks to pass.  We're not so concerned about area or timing, so feel free to relax those to make things run faster.  
+
+Your goal should be to achieve the following: 
+ - You have power rings around your SRAM macros
+ - You have a reasonable power grid in your core
+ - You have an overall pass on `run_checks.sh` command  
 

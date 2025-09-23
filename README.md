@@ -197,6 +197,17 @@ If you want to run check_connectivity manually, it can be found here:
 
 <img width="259" height="265" alt="image" src="https://github.com/user-attachments/assets/c673efc5-8c7a-4cc8-a0b1-4f69154e5fdf" />
 
+#### Pin Assignment
+
+If you want to control where the block pins are placed for a design instead of letting innovus place them randomly use the Pin Editor.
+
+Edit > Pin Editor
+
+<img width="814" height="896" alt="image" src="https://github.com/user-attachments/assets/78105ada-d2db-4460-85fe-91a9503101a7" />
+
+Here you can choose a pin group and assign it to an edge of the design (Top Bottom Left Right). Then you can specify the layer you want the pins to be on as well
+as the spacing and pattern of pin placement.
+
 #### Reset Floorplan
 
 If (or when) you run into floorplanning issues and want to "reset" your floorplan, try the "Clear Floorplan" option in the GUI: 
@@ -209,10 +220,6 @@ Once your happy with your floorplan, we suggest you save your floorplan.  Try Fi
 
 Now you can continue on with standard placement,  clock tree synthesis, routing, and signoff as per Project 1. 
 Most of this can be uncommented from the existing `pnr.tcl` script.  We recommend adding a `load_floorplan` command that loads the floorplan saved in the previous step.  
-
--------
-Jack:  Add stuff here.  
--------
 
 # Getting Help
 

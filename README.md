@@ -123,7 +123,8 @@ We don't want standard cells right up against the SRAM macros, so we'll use the 
 
 Start by selecting all 4 SRAM macros (Shift + Click).  With all 4 SRAM macros selected, select "Cut Core Rows" dropdown box, as shown below.  
 
-<img width="449" height="474" alt="image" src="https://github.com/user-attachments/assets/c6a13050-b349-4838-945d-eeb4abcd6ff7" />
+<img width="393" height="436" alt="image" src="https://github.com/user-attachments/assets/a19fdc37-d1bb-4420-accb-73c98bd00f21" />
+
 
 Once there, configure as shown below.  This will make sure no standard cells are placed within 4 "units" on the left/right, and 2 on the top/bottom.  The top/bottom units are larger than the left/right, so we're excluding a larger number of left/right units.  
 
@@ -170,13 +171,14 @@ And configure it as follows:
 
 Now let's add some power/ground strips to get the power distributed around the chip:
 
-<img width="601" height="654" alt="image" src="https://github.com/user-attachments/assets/725979d4-b7e3-4e5d-8dd4-cb9b803ff588" />
+<img width="284" height="247" alt="image" src="https://github.com/user-attachments/assets/a0b8e966-446d-42e3-a9ff-f46fe4149489" />
 
 This should draw horizontal strips on Met5:
 
-<img width="284" height="247" alt="image" src="https://github.com/user-attachments/assets/a0b8e966-446d-42e3-a9ff-f46fe4149489" />
+<img width="601" height="654" alt="image" src="https://github.com/user-attachments/assets/725979d4-b7e3-4e5d-8dd4-cb9b803ff588" />
 
-ANd this will draw verticle strips on Met4: 
+
+And this will draw vertical strips on Met4: 
 
 <img width="604" height="652" alt="image" src="https://github.com/user-attachments/assets/b1e68725-ee6e-4aee-a22d-ca5b6f2cd88a" />
 
@@ -186,6 +188,7 @@ ANd this will draw verticle strips on Met4:
 ```tcl
 check_connectivity -nets {VPWR VGND} -type all
 edit_trim_routes -all
+check_connectivity -nets {VPWR VGND} -type all
 ```
 
 #### Check Connectivity

@@ -219,7 +219,7 @@ Once your happy with your floorplan, we suggest you save your floorplan.  Try Fi
 ### Finish the flow. 
 
 Now you can continue on with standard placement,  clock tree synthesis, routing, and signoff as per Project 1. 
-Most of this can be uncommented from the existing `pnr.tcl` script.  We recommend adding a `load_floorplan` command that loads the floorplan saved in the previous step.  
+Most of this can be uncommented from the existing `pnr.tcl` script.  We recommend adding a `read_floorplan` command that loads the floorplan saved in the previous step.  
 
 # Getting Help
 

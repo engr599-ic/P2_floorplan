@@ -40,7 +40,8 @@ connect_global_net VGND -type pg_pin -pin_base_name VNB -all
 #   -nets {VPWR VGND} \
 #   -allow_layer_change 1
 #
-#add_well_taps -cell sky130_fd_sc_ms__tapvpwrvgnd_1 -cell_interval 50
+#add_well_taps -cell sky130_fd_sc_ms__tapvpwrvgnd_1 -cell_interval 60 -in_row_offset 30
+
 #
 ## Save a database
 #write_db -common dbs/pnr_init.db

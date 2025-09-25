@@ -3,7 +3,7 @@
 Version: 2025.0
 ---
 
-## Due Date:  FIXME
+## Due Date:  09:59am, Thursday, October 2nd, 2025
 
 
 

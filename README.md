@@ -125,10 +125,7 @@ Start by selecting all 4 SRAM macros (Shift + Click).  With all 4 SRAM macros se
 
 <img width="393" height="436" alt="image" src="https://github.com/user-attachments/assets/a19fdc37-d1bb-4420-accb-73c98bd00f21" />
 
-
 Once there, configure as shown below.  This will make sure no standard cells are placed within 4 "units" on the left/right, and 2 on the top/bottom.  The top/bottom units are larger than the left/right, so we're excluding a larger number of left/right units.  
-
-<img width="400" height="441" alt="image" src="https://github.com/user-attachments/assets/1d76c952-a3a7-4d7e-9c95-ae2f1cc0fa37" />
 
 ### Power Planning
 
